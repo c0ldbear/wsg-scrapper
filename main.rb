@@ -5,6 +5,12 @@ require 'csv'
 
 url = "https://w3c.github.io/sustyweb"
 response = HTTParty.get(url)
+save_to_json = true
+
+# Handle input argument for saving to -csv
+if !ARGV.empty? and ARGV[0].downcase == "-csv"
+    save_to_json = false
+end
 
 if response.code == 200
     puts "Success!"
@@ -51,18 +57,20 @@ if response.code == 200
         wsg_info[key] = sub_hash
     end
 
-    # Export to .json
-    File.open(Filename+".json", "wb") { |json|
-        json.write(JSON.pretty_generate(wsg_info))
-    }
-
-    # Build the .csv-file for Title, Impact and Effort as columns
-    CSV.open(Filename+".csv", "wb") { |csv| 
-        csv << [Title, Impact, Effort]
-        wsg_info.each { |key, value| 
-            csv << [key, value[Impact], value[Effort]]
+    if save_to_json 
+        # Export to .json
+        File.open(Filename+".json", "wb") { |json|
+            json.write(JSON.pretty_generate(wsg_info))
         }
-    }
+    else
+        # Build the .csv-file for Title, Impact and Effort as columns
+        CSV.open(Filename+".csv", "wb") { |csv| 
+            csv << [Title, Impact, Effort]
+            wsg_info.each { |key, value| 
+                csv << [key, value[Impact], value[Effort]]
+            }
+        }
+    end
 else 
     puts "Failed: #{response.code}"
 end
