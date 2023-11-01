@@ -1,5 +1,6 @@
 require 'httparty'
 require 'nokogiri'
+require 'json'
 require 'csv'
 
 url = "https://w3c.github.io/sustyweb"
@@ -12,7 +13,7 @@ if response.code == 200
     Title = "Title" 
     Impact = "Impact" 
     Effort = "Effort" 
-    Filename = "wsg-titles-impacts-efforts.csv"
+    Filename = "wsg-titles-impacts-efforts"
 
     # Allocation of variables
     wsg_info = {}
@@ -50,8 +51,13 @@ if response.code == 200
         wsg_info[key] = sub_hash
     end
 
+    # Export to .json
+    File.open(Filename+".json", "wb") { |json|
+        json.write(JSON.pretty_generate(wsg_info))
+    }
+
     # Build the .csv-file for Title, Impact and Effort as columns
-    CSV.open(Filename, "wb") { |csv| 
+    CSV.open(Filename+".csv", "wb") { |csv| 
         csv << [Title, Impact, Effort]
         wsg_info.each { |key, value| 
             csv << [key, value[Impact], value[Effort]]
