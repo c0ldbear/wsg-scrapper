@@ -4,7 +4,6 @@ require 'nokogiri'
 url = "https://w3c.github.io/sustyweb"
 response = HTTParty.get(url)
 
-stuff = {}
 
 if response.code == 200
     puts "Success!"
@@ -43,6 +42,21 @@ if response.code == 200
     ratings.shift(9) # 9 is the number of the first 8 explanations of the Impact and Effort part
     puts "ratings array new length: #{ratings.length}"
     puts ratings[0..10]
+
+    puts ""
+
+    stuff = {}
+    titles.each_with_index do | key, index |
+        start_index = index * 2
+
+        impact_value = ratings[start_index]
+        effort_value = ratings[start_index + 1]
+
+        sub_hash = {"Impact" => impact_value, "Effort" => effort_value}
+        stuff[key] = sub_hash
+    end
+
+    puts stuff
 else 
     puts "Failed: #{response.code}"
 end
