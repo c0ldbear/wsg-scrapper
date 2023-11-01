@@ -16,13 +16,14 @@ if response.code == 200
     puts "Success!"
     
     # Constants
+    Id = "Id"
     Title = "Title" 
     Impact = "Impact" 
     Effort = "Effort" 
     Filename = "wsg-titles-impacts-efforts"
 
     # Allocation of variables
-    wsg_info = {}
+    wsg_info = []
     html_doc = Nokogiri::HTML(response.body) 
     
     # Parse titles
@@ -50,11 +51,12 @@ if response.code == 200
     titles.each_with_index do | key, index |
         start_index = index * 2
 
+        id_value, title_value = key.split(/ /, 2)
         impact_value = ratings[start_index]
         effort_value = ratings[start_index + 1]
 
-        sub_hash = {Impact => impact_value, Effort => effort_value}
-        wsg_info[key] = sub_hash
+        sub_hash = {Id => id_value, Title => title_value, Impact => impact_value, Effort => effort_value}
+        wsg_info.append(sub_hash)
     end
 
     if save_to_json 
@@ -65,9 +67,9 @@ if response.code == 200
     else
         # Build the .csv-file for Title, Impact and Effort as columns
         CSV.open(Filename+".csv", "wb") { |csv| 
-            csv << [Title, Impact, Effort]
-            wsg_info.each { |key, value| 
-                csv << [key, value[Impact], value[Effort]]
+            csv << [Id, Title, Impact, Effort]
+            wsg_info.each { |obj| 
+                csv << [obj[Id], obj[Title], obj[Impact], obj[Effort]]
             }
         }
     end
