@@ -2,6 +2,10 @@
 
 This small ruby script scraps the [Web Sustainability Guidelines (aka WSG)](https://w3c.github.io/sustyweb/) for it's titles and the corresponding ratings (Impact and Effort). The scrapping of data is then saved in a .csv-file `wsg-titles-impacts-efforts.csv`.
 
+```
+Note: WSG is still work in progress and is just a draft. Take this information with some care and think for yourself is this applys to you and/or your organisation.
+```
+
 ## Setup
 Make sure you have Ruby installed. This script is tested with ruby version `ruby 3.0.6p216 (2023-03-30 revision 23a532679b) [arm64-darwin23]` on a MacBook Pro running MacOS 14.0.
 
