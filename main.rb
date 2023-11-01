@@ -1,5 +1,6 @@
 require 'httparty'
 require 'nokogiri'
+require 'csv'
 
 url = "https://w3c.github.io/sustyweb"
 response = HTTParty.get(url)
@@ -56,7 +57,15 @@ if response.code == 200
         stuff[key] = sub_hash
     end
 
-    puts stuff
+    CSV.open("data.csv", "wb") { |csv| 
+        csv << ['Title', 'Impact', 'Effort']
+        stuff.each { |key, value| 
+            # puts key
+            # puts [value["Impact"], value["Effort"]]
+            csv << [String(key), value["Impact"], value["Effort"]]
+            #csv << [elem["Impact"], elem["Effort"]]
+        }
+    }
 else 
     puts "Failed: #{response.code}"
 end

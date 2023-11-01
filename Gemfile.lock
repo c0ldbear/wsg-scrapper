@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    csv (3.2.7)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -14,6 +15,7 @@ PLATFORMS
   arm64-darwin-23
 
 DEPENDENCIES
+  csv
   httparty
   nokogiri
 
